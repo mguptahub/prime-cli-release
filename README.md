@@ -20,12 +20,12 @@ Download the latest release for your platform:
 
 ```bash
 # Linux (x64)
-curl -L https://github.com/makeplane/prime-cli/releases/latest/download/prime-cli-linux-amd64 -o prime-cli
+curl -L https://github.com/mguptahub/prime-cli-release/releases/latest/download/prime-cli-linux-amd64 -o prime-cli
 chmod +x prime-cli
 sudo mv prime-cli /usr/local/bin/
 
 # macOS (x64)
-curl -L https://github.com/makeplane/prime-cli/releases/latest/download/prime-cli-darwin-amd64 -o prime-cli
+curl -L https://github.com/mguptahub/prime-cli-release/releases/latest/download/prime-cli-darwin-amd64 -o prime-cli
 chmod +x prime-cli
 xattr -d com.apple.quarantine prime-cli
 sudo mv prime-cli /usr/local/bin/
