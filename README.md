@@ -18,13 +18,16 @@ Prime CLI is a command-line tool for managing Docker-based Plane application ins
 
 Download the latest release for your platform:
 
+#### Linux (x64)
 ```bash
-# Linux (x64)
 curl -L https://github.com/mguptahub/prime-cli-release/releases/latest/download/prime-cli-linux-amd64 -o prime-cli
 chmod +x prime-cli
 sudo mv prime-cli /usr/local/bin/
 
-# macOS (x64)
+```
+
+#### macOS (x64)
+```bash
 curl -L https://github.com/mguptahub/prime-cli-release/releases/latest/download/prime-cli-darwin-amd64 -o prime-cli
 chmod +x prime-cli
 xattr -d com.apple.quarantine prime-cli
@@ -35,7 +38,9 @@ sudo mv prime-cli /usr/local/bin/
 
 1. Create a new instance:
 ```bash
-prime-cli add myapp
+prime-cli add myapp 
+prime-cli add myapp --type community
+prime-cli add myapp --type community --dir /opt/plane/myapp
 ```
 
 2. Set up Plane with your domain:
