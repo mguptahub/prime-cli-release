@@ -8,7 +8,6 @@ These flags can be used with any command:
 
 - `--debug`: Enable debug logging
 - `--help`, `-h`: Show command help
-- `--version`, `-v`: Show CLI version
 
 ## Instance Management Commands
 
@@ -16,14 +15,15 @@ These flags can be used with any command:
 ```bash
 prime-cli add <name> [flags]
 
-Flags:
-  --dir string    Custom installation directory (default: ~/.prime/<name>)
-  --force         Force overwrite if directory exists
+Notes:
+- Creates a new Plane instance
+- Default installation directory: ~/.prime/<name>
 ```
 
 ### List Instances
 ```bash
 prime-cli list
+Aliases: ls
 
 Notes:
 - Shows all configured instances
@@ -33,65 +33,109 @@ Notes:
 ### Switch Instance
 ```bash
 prime-cli switch <name>
+Aliases: use
 
 Notes:
 - Switches active instance context
 - Required before using other commands
 ```
 
-### Remove Instance
+### Instance Status
 ```bash
-prime-cli remove <name> [flags]
-
-Flags:
-  --force         Skip confirmation prompt
+prime-cli status [instance]
 
 Notes:
-- Removes instance from management
-- Optionally deletes installation directory
+- Shows status of specified instance
+- Shows current instance if none specified
 ```
 
-## Install Commands
-
-### Configure Instance
+### Remove Instance
 ```bash
-prime-cli install [flags]
+prime-cli remove <name>
+Aliases: rm, delete
+
+Notes:
+- Removes instance configuration
+- Optionally removes installation directory
+```
+
+## Installation Commands
+
+### Install Instance
+```bash
+prime-cli install --domain <domain-name> [flags]
 
 Required Flags:
   --domain string               Domain name for instance
 
 Optional Flags:
-  # Basic Configuration
-  --http-port int              HTTP port (default: 80)
-  --https-port int             HTTPS port (default: 443)
-  --ssl                        Enable SSL/TLS
-  --start                      Start after install
+  # Source Configuration
   --release string             Specific version to install
-
-  # Repository Configuration
+  --start, -s                  Start after installation
+  --github-repo string         Custom GitHub repository
   --github-token, -t string    GitHub token for private repos
-  --github-repo, -r string     Custom GitHub repository
+
+  # File Configuration
   --compose-file, -f string    Custom compose file name
-  --env-file string           Custom env file name
+  --compose-file-url string    URL to download compose file (format: filename=url)
+  --compose-env, -n string     Custom env file name
+  --compose-env-url string     URL to download env file (format: filename=url)
   --additional-file strings    Additional files to download
+  --additional-file-url string URL to download additional files (format: filename=url)
 
   # Environment Variables
   --env, -e stringArray        Set env variables (KEY=VALUE)
+  --scale stringArray          Scale services (format: SERVICE=COUNT)
 
-  # Remote Services
-  --remote-db-url string       PostgreSQL database URL
-  --remote-redis-url string    Redis URL
-  
-  # S3 Storage
-  --s3-bucket string           S3 bucket name
-  --s3-region string           S3 region
-  --s3-access-key-id string    S3 access key
-  --s3-secret-access-key string S3 secret key
-  --s3-endpoint string         S3 endpoint URL
+  # Registry Configuration
+  --registry-url string        Docker registry URL
+  --registry-username string   Registry username
+  --registry-password string   Registry password
+  --registry-email string      Registry email
 
 Notes:
-- All configuration stored in ~/.prime-cli/config
-- Environment variables take precedence over defaults
+- Required for first-time setup
+- Creates necessary configuration files
+- Downloads required Docker images
+```
+
+### Configure Instance
+```bash
+prime-cli configure [flags]
+Aliases: config
+
+Flags:
+  --domain string          Update domain name
+  --env, -e stringArray    Set env variables (KEY=VALUE)
+  --scale stringArray      Scale services (SERVICE=COUNT)
+
+Subcommands:
+  ls, list    List current configuration
+
+Notes:
+- Updates instance configuration
+- Changes take effect after restart
+```
+
+### Upgrade Instance
+```bash
+prime-cli upgrade [flags]
+
+Flags:
+  --start, -s    Start after upgrade
+
+Notes:
+- Updates to latest version
+- Preserves configuration
+```
+
+### Update CLI
+```bash
+prime-cli update-cli
+
+Notes:
+- Updates Prime CLI tool itself
+- Preserves instance configurations
 ```
 
 ## Operation Commands
@@ -103,8 +147,7 @@ Aliases: up
 
 Notes:
 - Starts all services
-- Creates required directories
-- Loads environment configuration
+- Updates environment configuration
 ```
 
 ### Stop Instance
@@ -114,48 +157,33 @@ Aliases: down
 
 Notes:
 - Stops all services
-- Preserves data directories
+- Preserves data
 ```
 
 ### Restart Instance
 ```bash
 prime-cli restart
+Aliases: reboot
 
 Notes:
 - Equivalent to stop + start
 - Reloads configuration
 ```
 
-### View Status
+### Monitor Instance
 ```bash
-prime-cli status [flags]
-Aliases: ps, monitor
-
-Flags:
-  -f, --follow    Live status updates
+prime-cli monitor
+Aliases: ps
 
 Notes:
 - Shows running services
-- Displays ports and health status
-```
-
-### View Logs
-```bash
-prime-cli logs <service> [flags]
-Alias: log
-
-Flags:
-  -f, --follow        Follow log output
-  --tail string       Number of lines (default "100")
-
-Notes:
-- Streams service logs
-- Supports all docker-compose services
+- Displays service status
 ```
 
 ### Pull Updates
 ```bash
 prime-cli pull
+Aliases: get
 
 Notes:
 - Downloads latest Docker images
@@ -164,48 +192,31 @@ Notes:
 
 ## Maintenance Commands
 
-### Upgrade Instance
-```bash
-prime-cli upgrade [flags]
-
-Flags:
-  --start         Start after upgrade
-
-Notes:
-- Updates to latest version
-- Preserves configuration
-- Backs up data
-```
-
 ### Repair Installation
 ```bash
 prime-cli repair
 
 Notes:
-- Fixes broken installations
-- Preserves data and configuration
-- Downloads fresh files
+- Not yet implemented
+- Will fix broken installations
 ```
 
-### Update CLI
+### Backup Instance
 ```bash
-prime-cli update-cli
+prime-cli backup
 
 Notes:
-- Updates Prime CLI itself
-- Preserves instance configurations
+- Not yet implemented
+- Will backup instance data
 ```
 
-### Uninstall Instance
+### Restore Instance
 ```bash
-prime-cli uninstall [flags]
-
-Flags:
-  --force         Skip confirmation
+prime-cli restore
 
 Notes:
-- Removes instance files
-- Optionally preserves data
+- Not yet implemented
+- Will restore instance data
 ```
 
 ## Usage Notes
@@ -220,4 +231,3 @@ Notes:
 For detailed help on any command:
 ```bash
 prime-cli [command] --help
-```

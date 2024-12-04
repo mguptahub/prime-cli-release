@@ -1,225 +1,262 @@
 # Prime CLI Examples
 
-Comprehensive examples for using Prime CLI in various scenarios.
+This document provides practical examples of common Prime CLI usage patterns.
 
-## Basic Usage Examples
+## Instance Management
 
-### Local Development Install
+### Adding Instances
+
+```bash
+# Basic instance creation
+prime-cli add prod
+
+# Create instance with custom directory
+prime-cli add staging --dir /opt/plane/staging
+
+# Create instance with specific type
+prime-cli add dev --type community
+
+# Force create (overwrite existing)
+prime-cli add prod --force
+```
+
+### Managing Instances
+
+```bash
+# List all instances
+prime-cli list
+prime-cli ls
+
+# Switch between instances
+prime-cli switch prod
+prime-cli use staging
+
+# Check instance status
+prime-cli status
+
+# Remove instance
+prime-cli remove dev
+prime-cli rm dev --force  # Force remove with data deletion
+```
+
+## Installation & Configuration
+
+### Basic Installation
+
+```bash
+# Install with minimum configuration
+prime-cli install --domain plane.company.com
+
+# Install and start immediately
+prime-cli install --domain plane.company.com --start
+
+# Install specific version
+prime-cli install --domain plane.company.com --release v1.2.3
+```
+
+### Advanced Installation
+
+```bash
+# Install with custom registry
+prime-cli install --domain plane.company.com \
+  --registry-url registry.example.com \
+  --registry-username user \
+  --registry-password pass \
+  --registry-email user@example.com
+
+# Install with custom compose files
+prime-cli install --domain plane.company.com \
+  --compose-file custom-compose.yml \
+  --compose-env custom.env
+
+# Install with GitHub source
+prime-cli install --domain plane.company.com \
+  --github-repo organization/repo \
+  --github-token ghp_token123
+```
+
+### Environment Configuration
+
+```bash
+# Set multiple environment variables
+prime-cli configure --env DB_HOST=localhost \
+  --env DB_PORT=5432 \
+  --env REDIS_URL=redis://localhost:6379
+
+# Update domain
+prime-cli configure --domain new-domain.com
+
+# Scale services
+prime-cli configure --scale web=2 --scale worker=3
+
+# Combined configuration
+prime-cli configure \
+  --domain new-domain.com \
+  --env DB_URL=new-url \
+  --scale web=2
+```
+
+## Instance Operations
+
+### Lifecycle Management
+
+```bash
+# Start instance
+prime-cli start
+prime-cli up
+
+# Stop instance
+prime-cli stop
+prime-cli down
+
+# Restart instance
+prime-cli restart
+prime-cli reboot
+
+# Monitor instance
+prime-cli monitor
+prime-cli ps
+```
+
+### Updates and Maintenance
+
+```bash
+# Update CLI tool
+prime-cli update
+
+# Upgrade instance
+prime-cli upgrade
+prime-cli upgrade --start  # Upgrade and start
+
+# Pull latest changes
+prime-cli pull
+prime-cli get
+```
+
+## Working with Multiple Instances
+
+```bash
+# Create development setup
+prime-cli add dev --type community
+prime-cli switch dev
+prime-cli install --domain dev.local --start
+
+# Create staging environment
+prime-cli add staging
+prime-cli switch staging
+prime-cli install --domain staging.company.com \
+  --env ENVIRONMENT=staging \
+  --scale web=2
+
+# Create production environment
+prime-cli add prod
+prime-cli switch prod
+prime-cli install --domain plane.company.com \
+  --env ENVIRONMENT=production \
+  --scale web=3 \
+  --scale worker=2
+```
+
+## Common Workflows
+
+### Setting Up a New Instance
+
+```bash
+# 1. Create and switch to instance
+prime-cli add prod
+prime-cli switch prod
+
+# 2. Install with configuration
+prime-cli install --domain plane.company.com \
+  --registry-url registry.company.com \
+  --registry-username user \
+  --registry-password pass \
+  --env DB_URL=postgres://user:pass@host:5432/plane \
+  --env REDIS_URL=redis://host:6379 \
+  --scale web=2 \
+  --scale worker=2
+
+# 3. Start the instance
+prime-cli start
+```
+
+### Upgrading an Instance
+
+```bash
+# 1. Pull latest changes
+prime-cli pull
+
+# 2. Stop the instance
+prime-cli stop
+
+# 3. Upgrade
+prime-cli upgrade
+
+# 4. Start the instance
+prime-cli start
+
+# Or, combine steps with
+prime-cli upgrade --start
+```
+
+### Scaling for Production
+
+```bash
+# Scale web and worker processes
+prime-cli configure \
+  --scale web=3 \
+  --scale worker=2 \
+  --scale scheduler=2
+
+# Update environment configuration
+prime-cli configure \
+  --env MAX_WORKERS=4 \
+  --env CACHE_SIZE=2048 \
+  --env LOG_LEVEL=info
+```
+
+### Development Workflow
+
 ```bash
 # Create development instance
 prime-cli add dev
-prime-cli install \
-  --domain localhost \
-  --http-port 8080 \
-  --https-port 8443 \
-  --start
+prime-cli switch dev
 
-# Monitor services
-prime-cli status -f
-prime-cli logs api --tail 50 -f
-```
-
-### Production Deployment
-```bash
-# Create and configure production instance
-prime-cli add prod
-prime-cli install \
-  --domain plane.company.com \
-  --ssl \
-  --env ENVIRONMENT=production \
-  --start
-
-# View status and logs
-prime-cli status
-prime-cli logs web
-```
-
-### Staging Environment
-```bash
-# Create staging instance with custom database
-prime-cli add staging
-prime-cli install \
-  --domain staging.plane.company.com \
-  --remote-db-url "postgres://user:pass@host:5432/plane_staging" \
-  --env ENVIRONMENT=staging
-```
-
-## Advanced Configuration Examples
-
-### Complete Production Install with Remote Services
-```bash
-prime-cli add prod
-prime-cli install \
-  --domain plane.company.com \
-  --ssl \
-  --remote-db-url "postgres://user:pass@host:5432/plane" \
-  --remote-redis-url "redis://user:pass@host:6379" \
-  --s3-bucket "plane-uploads" \
-  --s3-region "us-east-1" \
-  --s3-access-key-id "your-access-key" \
-  --s3-secret-access-key "your-secret-key" \
-  --s3-endpoint "https://s3.amazonaws.com" \
-  --env SMTP_HOST=smtp.example.com \
-  --env SMTP_PORT=587 \
-  --env SMTP_USER=user@example.com \
-  --env SMTP_PASS=password \
-  --env COMPANY_NAME="ACME Corp" \
-  --start
-```
-
-### Custom Repository and Version
-```bash
-# Use private repository
-prime-cli install \
-  --domain plane.example.com \
-  --github-repo organization/private-repo \
-  --github-token ghp_yourtokenhere \
-  --compose-file custom-compose.yml \
-  --env-file custom.env
-
-# Install specific version
-prime-cli install \
-  --domain plane.example.com \
-  --release v1.2.3
-```
-
-### Multiple Instances
-```bash
-# Create instances
-prime-cli add prod
-prime-cli add staging
-prime-cli add dev
-
-# List and switch
-prime-cli list
-prime-cli switch staging
-
-# Remove old instance
-prime-cli remove old-instance --force
-```
-
-## Maintenance Examples
-
-### Backup and Restore
-```bash
-# Stop instance before backup
-prime-cli stop
-
-# Backup data directories
-tar -czf backup.tar.gz ~/.prime/myapp/pgdata ~/.prime/myapp/minio
-
-# Restore from backup
-prime-cli stop
-rm -rf ~/.prime/myapp/pgdata ~/.prime/myapp/minio
-tar -xzf backup.tar.gz -C /
-prime-cli start
-```
-
-### Upgrades and Updates
-```bash
-# Update CLI
-prime-cli update-cli
-
-# Upgrade instance
-prime-cli upgrade --start
-
-# Repair broken installation
-prime-cli repair
-```
-
-### Monitoring and Debugging
-```bash
-# Live status monitoring
-prime-cli status -f
-
-# Follow multiple service logs
-prime-cli logs api -f
-prime-cli logs web -f
-prime-cli logs worker -f
-
-# Debug mode
-prime-cli --debug status
-prime-cli --debug install --domain example.com
-```
-
-## Environment-Specific Examples
-
-### Development Environment
-```bash
-prime-cli add dev
-prime-cli install \
-  --domain localhost \
-  --http-port 8080 \
+# Install with development settings
+prime-cli install --domain localhost \
   --env ENVIRONMENT=development \
   --env DEBUG=true \
   --env LOG_LEVEL=debug
-```
 
-### Testing Environment
-```bash
-prime-cli add test
-prime-cli install \
-  --domain test.plane.local \
-  --env ENVIRONMENT=testing \
-  --env TEST_MODE=true \
-  --remote-db-url "postgres://test:test@localhost:5432/plane_test"
-```
-
-### Production Environment
-```bash
-prime-cli add prod
-prime-cli install \
-  --domain plane.company.com \
-  --ssl \
-  --env ENVIRONMENT=production \
-  --env LOG_LEVEL=info \
-  --env RATE_LIMIT=true \
-  --env RATE_LIMIT_REQUESTS=100 \
-  --env RATE_LIMIT_PERIOD=60
-```
-
-## Docker Compose Service Examples
-
-### Basic Service Status
-```bash
-# View all services
-prime-cli status
-
-# Monitor specific service
-prime-cli logs web --tail 100 -f
-```
-
-### Service Management
-```bash
-# Start all services
+# Start development server
 prime-cli start
 
-# Stop specific service
-docker compose stop web
-
-# Restart services
-prime-cli restart
+# Monitor logs and status
+prime-cli monitor
 ```
 
-## Troubleshooting Examples
+## Tips and Tricks
 
-### Debug Mode
+### Using Environment Files
+
 ```bash
-# Enable debug logging
-prime-cli --debug install --domain example.com
-prime-cli --debug status
-prime-cli --debug logs api
+# Export current configuration
+prime-cli configure list > config.txt
+
+# View all configuration
+prime-cli configure ls
 ```
 
-### Repair and Recovery
+### Troubleshooting
+
 ```bash
-# Repair broken installation
-prime-cli repair
+# Check instance status
+prime-cli status
 
-# Force remove problematic instance
-prime-cli remove broken --force
+# Monitor service logs
+prime-cli monitor
 
-# Clean reinstall
-prime-cli uninstall --force
-prime-cli install --domain example.com --start
-```
+# Force cleanup and reinstall
+prime-cli remove prod --force
+prime-cli add prod
+prime-cli install --domain plane.company.com --start

@@ -1,132 +1,81 @@
 # Prime CLI
 
-Prime CLI is a command-line tool for managing Docker-based Plane application instances. It simplifies the deployment, maintenance, and updates of Plane across multiple environments.
+A command-line interface tool for managing Plane instances.
 
 ## Features
 
-- Multi-instance management for running multiple Plane deployments
-- Automatic Docker installation and configuration
-- Simple domain and SSL/TLS setup
-- Remote database, Redis, and S3 storage integration
-- Version management and automatic updates
-- Comprehensive logging and monitoring
-- Environment-specific configurations
+- Easy installation and configuration of Plane instances
+- Multiple instance management
+- Docker-based deployment
+- Automatic updates and maintenance
+- Instance monitoring and logging
+
+## Installation
+
+```bash
+# Download and install the latest release
+curl -sSL https://raw.githubusercontent.com/makeplane/prime-cli/main/install.sh | bash
+```
 
 ## Quick Start
 
-### Installation
-
-Download the latest release for your platform:
-
-#### Linux (x64)
-```bash
-curl -L https://github.com/mguptahub/prime-cli-release/releases/latest/download/prime-cli-linux-amd64 -o prime-cli
-chmod +x prime-cli
-sudo mv prime-cli /usr/local/bin/
-
-```
-
-#### macOS (x64)
-```bash
-curl -L https://github.com/mguptahub/prime-cli-release/releases/latest/download/prime-cli-darwin-amd64 -o prime-cli
-chmod +x prime-cli
-xattr -d com.apple.quarantine prime-cli
-sudo mv prime-cli /usr/local/bin/
-```
-
-### Basic Usage
-
 1. Create a new instance:
 ```bash
-prime-cli add myapp 
-prime-cli add myapp --type community
-prime-cli add myapp --type community --dir /opt/plane/myapp
+prime-cli add myinstance
 ```
 
-2. Set up Plane with your domain:
+2. Install Plane with your domain:
 ```bash
-prime-cli install --domain plane.example.com --start
+prime-cli install --domain your-domain.com
+```
+
+3. Start the instance:
+```bash
+prime-cli start
 ```
 
 ## Available Commands
 
 ### Instance Management
-- `prime-cli add <name>` - Create new instance (aliases: create, new)
-- `prime-cli list` - List all instances (alias: ls)
-- `prime-cli switch <name>` - Switch between instances (alias: use)
-- `prime-cli remove <name>` - Remove instance (aliases: rm, delete)
+- `add` - Create a new instance
+- `list` (alias: `ls`) - List all instances
+- `switch` - Switch between instances
+- `status` - Show instance status
+- `remove` (alias: `rm`) - Remove an instance
 
-### Installation and Configuration
-- `prime-cli install` - Configure instance with domain and services
-  ```bash
-  # Basic installation
-  prime-cli install --domain plane.example.com
-  
-  # With SSL and custom ports
-  prime-cli install --domain plane.example.com --ssl --http-port 80 --https-port 443
-  
-  # With remote services
-  prime-cli install --domain plane.example.com \
-    --remote-db-url "postgres://user:pass@host:5432/plane" \
-    --remote-redis-url "redis://host:6379"
-  ```
+### Installation & Configuration
+- `install` - Install a new Plane instance
+- `configure` (alias: `config`) - Configure instance settings
+- `upgrade` - Upgrade to latest version
+- `update-cli` - Update the CLI tool
 
-- `prime-cli configure` - Update instance configuration (alias: config)
-  ```bash
-  # Update domain and SSL settings
-  prime-cli configure --domain new.example.com --ssl
-  
-  # Update environment variables
-  prime-cli configure --env KEY1=value1 --env KEY2=value2
-  ```
+### Operations
+- `start` (alias: `up`) - Start instance
+- `stop` (alias: `down`) - Stop instance
+- `restart` (alias: `reboot`) - Restart instance
+- `pull` (alias: `get`) - Pull latest Docker images
+- `monitor` (alias: `ps`) - Monitor instance status
 
-### Operation Commands
-- `prime-cli start` - Start instance (alias: up)
-- `prime-cli stop` - Stop instance (alias: down)
-- `prime-cli restart` - Restart instance (alias: reboot)
-- `prime-cli status` - View instance status (aliases: ps, monitor)
-- `prime-cli logs <service>` - View service logs (alias: log)
-  ```bash
-  # Follow logs with tail
-  prime-cli logs api --follow --tail 100
-  ```
+### Maintenance
+- `repair` - Repair installation
+- `backup` - Backup instance data
+- `restore` - Restore instance data
 
-### Maintenance Commands
-- `prime-cli pull` - Pull latest Docker images (alias: get)
-- `prime-cli upgrade` - Upgrade to latest version
-- `prime-cli uninstall` - Remove instance setup (alias: un)
-- `prime-cli update` - Update Prime CLI itself
+For detailed command documentation, see [COMMANDS.md](docs/COMMANDS.md)
 
-### Work in Progress Commands
-The following commands are planned but not yet implemented:
-- `prime-cli backup` - Backup Plane data (WIP)
-- `prime-cli restore` - Restore Plane data (WIP)
-- `prime-cli repair` - Repair broken installations (WIP)
+## Configuration
 
-## Directory Structure
+For detailed configuration options, see [CONFIG.md](docs/CONFIG.md)
 
-### Installation Directory
-```
-~/.prime/myapp/
-├── docker-compose.yml  # Docker compose configuration
-├── plane.env          # Environment variables
-├── .....
-└── .....
-```
+## Examples
 
-### Configuration
-```
-~/.prime-cli/config   # CLI configuration file
-```
-
-## Documentation
-
-- [Command Reference](docs/COMMANDS.md) - Detailed command documentation
-- [Examples](docs/EXAMPLES.md) - Common use cases and examples
-- [Configuration Guide](docs/CONFIG.md) - Configuration options and best practices
+For usage examples, see [EXAMPLES.md](docs/EXAMPLES.md)
 
 ## Support
 
-- GitHub Issues: Report bugs and feature requests
-- Documentation: [Full documentation](https://docs.plane.so)
-- Community: [Discord](https://discord.gg/A92xrEGCge)
+- GitHub Issues: [Report a bug](https://github.com/mguptahub/prime-cli-release/issues)
+- Documentation: [View full documentation](https://docs.plane.so)
+
+## License
+
+This project is licensed under the [MIT License](LICENSE)
