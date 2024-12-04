@@ -14,7 +14,7 @@ A command-line interface tool for managing Plane instances.
 
 ```bash
 # Download and install the latest release
-curl -sSL https://raw.githubusercontent.com/makeplane/prime-cli/main/install.sh | bash
+curl -sSL https://github.com/mguptahub/prime-cli-release-release/releases/latest/download/install.sh | bash
 ```
 
 ## Quick Start
