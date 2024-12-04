@@ -45,8 +45,18 @@ Notes:
 prime-cli status [instance]
 
 Notes:
-- Shows status of specified instance
+- Shows detailed status of specified instance
 - Shows current instance if none specified
+- Displays:
+  * Instance name and installation directory
+  * Instance state (Ready, Running)
+  * Start and stop timestamps
+  * Domain and app version
+  * Volume mapping configuration
+  * GitHub repository details
+  * Docker compose configuration
+  * Additional files and custom configurations
+  * Registry settings
 ```
 
 ### Remove Instance
@@ -85,6 +95,7 @@ Optional Flags:
 
   # Environment Variables
   --env, -e stringArray        Set env variables (KEY=VALUE)
+  --map-volume-to-disk         Map volumes to disk
   --scale stringArray          Scale services (format: SERVICE=COUNT)
 
   # Registry Configuration
@@ -107,7 +118,7 @@ Aliases: config
 Flags:
   --domain string          Update domain name
   --env, -e stringArray    Set env variables (KEY=VALUE)
-  --scale stringArray      Scale services (SERVICE=COUNT)
+  --scale stringArray      Scale services (format: SERVICE=COUNT)
 
 Subcommands:
   ls, list    List current configuration

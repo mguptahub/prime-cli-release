@@ -5,10 +5,13 @@ A command-line interface tool for managing Plane instances.
 ## Features
 
 - Easy installation and configuration of Plane instances
-- Multiple instance management
-- Docker-based deployment
+- Multiple instance management with status monitoring
+- Docker-based deployment with custom registry support
+- Volume mapping for persistent data storage
+- Support for custom compose files and environment configurations
+- GitHub repository integration
+- Instance health monitoring and detailed status reporting
 - Automatic updates and maintenance
-- Instance monitoring and logging
 
 ## Installation
 

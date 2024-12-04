@@ -21,6 +21,14 @@ The main configuration file stores instance settings in JSON format:
         "app_version": "v1.2.3",
         "compose_file": "docker-compose.yml",
         "compose_env": "plane.env",
+        "map_volume_to_disk": true,
+        "github_repo": "makeplane/plane",
+        "compose_file_url": "https://example.com/docker-compose.yml",
+        "compose_env_url": "https://example.com/plane.env",
+        "additional_files": [
+          "nginx.conf",
+          "custom-script.sh"
+        ],
         "registry": {
           "url": "registry.example.com",
           "username": "user",
@@ -39,6 +47,10 @@ The main configuration file stores instance settings in JSON format:
           "CORS_ALLOWED_ORIGINS": "http://plane.company.com:80,https://plane.company.com:443"
         }
       },
+      "ready": true,
+      "running": true,
+      "started_at": "2024-01-01T00:00:00Z",
+      "stopped_at": null,
       "created_at": "2024-01-01T00:00:00Z",
       "updated_at": "2024-01-01T00:00:00Z"
     }

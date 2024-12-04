@@ -64,15 +64,31 @@ prime-cli install --domain plane.company.com \
   --registry-password pass \
   --registry-email user@example.com
 
-# Install with custom compose files
+# Install with volume mapping enabled
+prime-cli install --domain plane.company.com \
+  --map-volume-to-disk
+
+# Install from GitHub repository
+prime-cli install --domain plane.company.com \
+  --github-repo makeplane/plane \
+  --github-token ghp_token123
+
+# Install with custom compose files and additional configurations
 prime-cli install --domain plane.company.com \
   --compose-file custom-compose.yml \
-  --compose-env custom.env
+  --compose-env custom.env \
+  --additional-file nginx.conf \
+  --additional-file custom-script.sh
 
-# Install with GitHub source
+# Combined installation with all features
 prime-cli install --domain plane.company.com \
-  --github-repo organization/repo \
-  --github-token ghp_token123
+  --map-volume-to-disk \
+  --github-repo makeplane/plane \
+  --github-token ghp_token123 \
+  --registry-url registry.example.com \
+  --registry-username user \
+  --registry-password pass \
+  --scale web=2 --scale worker=3
 ```
 
 ### Environment Configuration
@@ -116,6 +132,22 @@ prime-cli reboot
 # Monitor instance
 prime-cli monitor
 prime-cli ps
+```
+
+### Status and Monitoring
+
+```bash
+# View detailed status of current instance
+prime-cli status
+
+# View status of specific instance
+prime-cli status prod
+
+# Monitor instance with continuous updates
+prime-cli monitor
+
+# View instance logs
+prime-cli logs
 ```
 
 ### Updates and Maintenance
