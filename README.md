@@ -16,7 +16,7 @@ A command-line interface tool for managing Plane instances.
 ## Installation
 
 ```bash
-curl -sSL https://github.com/mguptahub/prime-cli-release/releases/latest/download/install.sh | sudo bash
+curl -sSL https://github.com/mguptahub/prime-cli-release/releases/latest/download/install.sh | bash
 ```
 
 ## Quick Start
@@ -45,11 +45,27 @@ prime-cli start
 - `status` - Show instance status
 - `remove` (alias: `rm`) - Remove an instance
 
+### Docker Setup
+- `docker-setup` - Ensure Docker is properly installed and configured for Plane
+```bash
+prime-cli docker-setup
+```
+This command will:
+- Check if Docker is installed and running correctly
+- For Linux systems, attempt automatic installation if Docker is not present
+- Verify Docker daemon is responding after installation
+- Configure Docker for optimal use with Plane
+
 ### Installation & Configuration
 - `install` - Install a new Plane instance
 - `configure` (alias: `config`) - Configure instance settings
 - `upgrade` - Upgrade to latest version
-- `update-cli` - Update the CLI tool
+
+### System Management
+- `update-cli` (alias: `update`) - Update the Prime CLI tool to the latest version
+  - Requires root/administrator privileges depending on installation directory
+  - Preserves all instance configurations and settings
+  - Downloads and installs the latest version from GitHub
 
 ### Operations
 - `start` (alias: `up`) - Start instance
