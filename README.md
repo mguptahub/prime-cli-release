@@ -16,7 +16,6 @@ A command-line interface tool for managing Plane instances.
 ## Installation
 
 ```bash
-# Download and install the latest release
 curl -sSL https://github.com/mguptahub/prime-cli-release/releases/latest/download/install.sh | sudo bash
 ```
 
