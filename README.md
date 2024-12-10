@@ -1,5 +1,14 @@
 # Prime CLI
 
+```
+      /////////
+      /////////   Plane
+/////     /////   Project management software
+/////     /////   www.plane.so
+     /////     
+     /////     
+```
+
 A command-line interface tool for managing Plane instances.
 
 ## Features
@@ -15,79 +24,29 @@ A command-line interface tool for managing Plane instances.
 
 ## Installation
 
+To install Prime CLI, run:
+
 ```bash
 curl -sSL https://github.com/mguptahub/prime-cli-release/releases/latest/download/install.sh | bash
 ```
 
-## Quick Start
+This will:
+- Download the latest version of Prime CLI
+- Install it to `~/.local/bin/prime-cli`
+- Make it available system-wide for current user
+- Set appropriate permissions
 
-1. Create a new instance:
+Verify the installation:
 ```bash
-prime-cli add myinstance
+prime-cli --version
 ```
 
-2. Install Plane with your domain:
-```bash
-prime-cli install --domain your-domain.com
-```
+## Documentation
 
-3. Start the instance:
-```bash
-prime-cli start
-```
-
-## Available Commands
-
-### Instance Management
-- `add` - Create a new instance
-- `list` (alias: `ls`) - List all instances
-- `switch` - Switch between instances
-- `status` - Show instance status
-- `remove` (alias: `rm`) - Remove an instance
-
-### Docker Setup
-- `docker-setup` - Ensure Docker is properly installed and configured for Plane
-```bash
-prime-cli docker-setup
-```
-This command will:
-- Check if Docker is installed and running correctly
-- For Linux systems, attempt automatic installation if Docker is not present
-- Verify Docker daemon is responding after installation
-- Configure Docker for optimal use with Plane
-
-### Installation & Configuration
-- `install` - Install a new Plane instance
-- `configure` (alias: `config`) - Configure instance settings
-- `upgrade` - Upgrade to latest version
-
-### System Management
-- `update-cli` (alias: `update`) - Update the Prime CLI tool to the latest version
-  - Requires root/administrator privileges depending on installation directory
-  - Preserves all instance configurations and settings
-  - Downloads and installs the latest version from GitHub
-
-### Operations
-- `start` (alias: `up`) - Start instance
-- `stop` (alias: `down`) - Stop instance
-- `restart` (alias: `reboot`) - Restart instance
-- `pull` (alias: `get`) - Pull latest Docker images
-- `monitor` (alias: `ps`) - Monitor instance status
-
-### Maintenance
-- `repair` - Repair installation
-- `backup` - Backup instance data
-- `restore` - Restore instance data
-
-For detailed command documentation, see [COMMANDS.md](docs/COMMANDS.md)
-
-## Configuration
-
-For detailed configuration options, see [CONFIG.md](docs/CONFIG.md)
-
-## Examples
-
-For usage examples, see [EXAMPLES.md](docs/EXAMPLES.md)
+For detailed documentation on all commands, sub-commands, and their options, please refer to:
+- [Detailed Command Reference](docs/README-DETAILED.md) - Complete documentation of all commands and options
+- [Configuration Guide](docs/CONFIG.md) - Detailed configuration options and examples
+- [Usage Examples](docs/EXAMPLES.md) - Common usage patterns and workflows
 
 ## Support
 
