@@ -255,6 +255,34 @@ Aliases: list
   * Displays KEY=VALUE pairs
   * Includes both default and custom variables
 
+#### View Configuration
+View the current Docker Compose configuration.
+
+```bash
+prime-cli configure view
+Aliases: print
+```
+
+**Flags:**
+| Flag | Description |
+|------|-------------|
+| `--out`, `-o` | Save the configuration to the specified file path |
+
+**Output Information:**
+- If the service is running, displays the current `.run.yml` configuration
+- If the service is not running, generates and displays a new configuration
+- Use `--out` flag to save the configuration to a file instead of displaying it
+
+**Examples:**
+```bash
+# Display configuration
+prime-cli configure view
+
+# Save configuration to file
+prime-cli configure view --out /path/to/config.yml
+prime-cli configure view -o ./my-config.yml
+```
+
 **Notes:**
 - At least one flag must be specified for the main configure command
 - Changes take effect after restart
