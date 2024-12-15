@@ -401,28 +401,65 @@ prime-cli repair
 - Validates configuration integrity
 
 ### Backup
-Creates backup of instance data.
+Creates a backup of the current Plane instance.
 
 ```bash
-prime-cli backup
+prime-cli backup [flags]
 ```
 
-**Notes:**
-- Not yet implemented
-- Will backup all instance data
-- Includes volume contents
+**Subcommands:**
+- `list`, `ls`: Lists all available backups
+- `validate`, `check`: Validates a backup
+
+#### Backup Creation
+Running `backup` without subcommands creates a new backup:
+- Creates a timestamped backup in the instance's backup directory
+- Includes database data, configuration files, and environment settings
+- Backup directory: `<instance-dir>/backups/<timestamp>`
+
+#### List Backups
+```bash
+prime-cli backup list
+Aliases: ls
+```
+
+**Output Information:**
+- Lists all available backups for the current instance
+- Shows backup date and time
+- Displays backup size
+- Shows backup path
+
+#### Validate Backup
+```bash
+prime-cli backup validate <backup-path>
+Aliases: check
+```
+
+**Arguments:**
+- `backup-path`: Path to the backup directory to validate (required)
+
+**Validation Checks:**
+- Verifies backup structure and integrity
+- Checks for required files and configurations
+- Validates backup metadata
 
 ### Restore
-Restores instance from backup.
+Restores a Plane instance from a backup.
 
 ```bash
-prime-cli restore
+prime-cli restore [flags]
 ```
 
+**Required Flags:**
+| Flag | Description |
+|------|-------------|
+| `--backup`, `-b` | Path to backup directory (required) |
+
 **Notes:**
-- Not yet implemented
-- Will restore instance data
-- Validates backup integrity
+1. Ensure the instance is stopped before restoration
+2. Backup validation is performed before restoration
+3. Current data will be replaced with backup data
+4. Service configurations will be restored to backup state
 
 ## Usage Notes
 
