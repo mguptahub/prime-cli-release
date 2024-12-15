@@ -7,7 +7,7 @@ Prime CLI is a powerful command-line interface tool for managing Plane instances
 To install Prime CLI, run:
 
 ```bash
-curl -sSL https://github.com/mguptahub/prime-cli-release/releases/latest/download/install.sh | bash
+curl -sSL https://github.com/makeplane/prime-cli/releases/latest/download/install.sh | bash
 ```
 
 This will:
@@ -389,16 +389,28 @@ Aliases: get
 ## Maintenance Commands
 
 ### Repair
-Repairs broken installations.
+Repairs the current instance using previously downloaded configuration.
 
 ```bash
 prime-cli repair
 ```
 
+**Actions:**
+1. Confirms user intent before proceeding
+2. Reinstalls the instance using the existing configuration:
+   - Uses current domain and version settings
+   - Preserves GitHub repository settings
+   - Maintains Docker registry configuration
+   - Keeps environment variables and service scaling
+   - Retains volume mapping settings
+3. Downloads and updates necessary files
+4. Reconfigures the instance with saved settings
+
 **Notes:**
-- Not yet implemented
-- Will fix common installation issues
-- Validates configuration integrity
+1. Repair is useful when instance files are corrupted or missing
+2. Does not modify or delete existing data volumes
+3. Preserves all custom configurations and settings
+4. Can be used to fix broken installations
 
 ### Backup
 Creates a backup of the current Plane instance.
@@ -473,3 +485,5 @@ prime-cli restore [flags]
 For detailed help on any command:
 ```bash
 prime-cli [command] --help
+
+```
