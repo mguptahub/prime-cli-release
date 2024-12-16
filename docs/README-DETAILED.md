@@ -459,7 +459,7 @@ Aliases: check
 Restores a Plane instance from a backup.
 
 ```bash
-prime-cli restore [flags]
+prime-cli restore [backup-path] [flags]
 ```
 
 **Required Flags:**
