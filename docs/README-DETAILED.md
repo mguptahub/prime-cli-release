@@ -225,16 +225,9 @@ prime-cli install [flags]
 Updates instance configuration.
 
 ```bash
-prime-cli configure [flags]
+prime-cli configure [command]
 Aliases: config
 ```
-
-**Flags:**
-| Flag | Description |
-|------|-------------|
-| `--domain <domain>` | Update domain name |
-| `--env`, `-e` | Set environment variables (format: KEY=VALUE) |
-| `--scale` | Scale services (format: SERVICE=COUNT) |
 
 **Subcommands:**
 
@@ -242,8 +235,8 @@ Aliases: config
 Display current configuration.
 
 ```bash
-prime-cli configure ls
-Aliases: list
+prime-cli configure list
+Aliases: ls
 ```
 
 **Output Information:**
@@ -254,6 +247,41 @@ Aliases: list
   * Shows all configured environment variables
   * Displays KEY=VALUE pairs
   * Includes both default and custom variables
+
+
+#### Set Configuration (set)
+Updates a configuration value.
+
+```bash
+prime-cli configure set [flags]
+```
+
+**Flags:**
+
+| Flag | Description |
+|------|-------------|
+| `--domain <domain>` | Update domain name |
+| `--env`, `-e` | Set environment variables (format: KEY=VALUE) |
+| `--scale` | Scale services (format: SERVICE=COUNT) |
+
+**Notes:**
+
+- Multiple `--env` flags can be used for setting environment variables
+- Multiple `--scale` flags can be used for scaling services
+
+#### Reload Configuration
+
+Regenerate and Reloads the current configuration.
+
+```bash
+prime-cli configure reload
+```
+
+**Notes:**
+
+- Stops all running services
+- Generates a new configuration
+- Restarts all services
 
 #### View Configuration
 View the current Docker Compose configuration.
