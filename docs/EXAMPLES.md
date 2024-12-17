@@ -309,7 +309,8 @@ prime-cli configure \
 prime-cli configure \
   --env MAX_WORKERS=4 \
   --env CACHE_SIZE=2048 \
-  --env LOG_LEVEL=info
+  --env LOG_LEVEL=info \
+  --restart
 ```
 
 ### Development Workflow

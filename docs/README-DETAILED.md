@@ -263,6 +263,7 @@ prime-cli configure set [flags]
 | `--domain <domain>` | Update domain name |
 | `--env`, `-e` | Set environment variables (format: KEY=VALUE) |
 | `--scale` | Scale services (format: SERVICE=COUNT) |
+| `--restart`, `-r` | Restart services after update |
 
 **Notes:**
 
