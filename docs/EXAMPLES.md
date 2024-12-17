@@ -94,22 +94,63 @@ prime-cli install --domain plane.company.com \
 ### Environment Configuration
 
 ```bash
-# Set multiple environment variables
-prime-cli configure --env DB_HOST=localhost \
-  --env DB_PORT=5432 \
-  --env REDIS_URL=redis://localhost:6379
+# List current configuration
+prime-cli configure list
+prime-cli configure ls
 
-# Update domain
-prime-cli configure --domain new-domain.com
+# View current configuration
+prime-cli configure view
+prime-cli configure view --out config.yml
 
-# Scale services
-prime-cli configure --scale web=2 --scale worker=3
+# Update configuration values
+prime-cli configure set --domain new-domain.com
+prime-cli configure set --env DB_HOST=localhost --env DB_PORT=5432
+prime-cli configure set --scale web=2 --scale worker=3
 
-# Combined configuration
-prime-cli configure \
+# Combined configuration update
+prime-cli configure set \
   --domain new-domain.com \
   --env DB_URL=new-url \
   --scale web=2
+
+# Reload configuration after changes
+prime-cli configure reload
+
+# View updated configuration
+prime-cli configure view
+```
+
+### Advanced Configuration Examples
+
+```bash
+# Update environment variables for different components
+prime-cli configure set \
+  --env DB_HOST=localhost \
+  --env DB_PORT=5432 \
+  --env REDIS_URL=redis://localhost:6379 \
+  --env SMTP_HOST=smtp.example.com \
+  --env SMTP_PORT=587
+
+# Scale multiple services
+prime-cli configure set \
+  --scale web=3 \
+  --scale worker=2 \
+  --scale redis=1
+
+# Update domain and SSL settings
+prime-cli configure set \
+  --domain plane.example.com \
+  --env SSL_CERT_PATH=/etc/ssl/certs/plane.crt \
+  --env SSL_KEY_PATH=/etc/ssl/private/plane.key
+
+# Configure with registry settings
+prime-cli configure set \
+  --env REGISTRY_URL=registry.example.com \
+  --env REGISTRY_USER=user \
+  --env REGISTRY_PASS=pass
+
+# Save and apply changes
+prime-cli configure reload
 ```
 
 ## Instance Operations
@@ -163,6 +204,30 @@ prime-cli upgrade --start  # Upgrade and start
 # Pull latest changes
 prime-cli pull
 prime-cli get
+```
+
+## Backup and Restore
+
+```bash
+# Create a backup
+prime-cli backup
+prime-cli backup --dir /custom/backup/path
+
+# Automated backup with timestamp
+prime-cli backup --dir "/backups/$(date +%Y%m%d_%H%M%S)"
+
+# Restore from a backup
+prime-cli restore <backup-id>
+
+# Restore with specific options
+prime-cli restore -b <backup-id>
+
+# List available backups
+prime-cli backup list
+prime-cli backup ls
+
+# View backup details
+prime-cli backup info <backup-id>
 ```
 
 ## Working with Multiple Instances
