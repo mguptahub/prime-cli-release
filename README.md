@@ -41,6 +41,41 @@ Verify the installation:
 prime-cli --version
 ```
 
+## Docker Setup
+
+To set up Docker for optimal performance, run:
+```bash
+prime-cli docker-setup
+```
+
+## Setting Up Community Edition
+
+To set up a community edition instance, run:
+```bash
+prime-cli add <instance-name> --type community
+```
+
+To install the latest version of Plane, run:
+```bash
+prime-cli install --domain plane.company.com --version v0.24.0
+```
+
+This will:
+- Download and install the latest version of Plane
+- Configure the instance with the provided domain and version
+- Set up the instance for community user access
+
+## Usage
+
+To list available commands, run:
+```bash
+prime-cli --help
+```
+
+## Setting Up Commercial Edition
+
+This is Work-In-Progress and will be available in a future release.
+
 ## Documentation
 
 For detailed documentation on all commands, sub-commands, and their options, please refer to:
