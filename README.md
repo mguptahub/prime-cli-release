@@ -50,6 +50,13 @@ prime-cli docker-setup
 
 ## Setting Up Community Edition
 
+### Docker Based Setup
+
+> Optional: To set up Docker for optimal performance, run:
+> ```bash
+> prime-cli docker-setup
+> ```
+
 To set up a community edition instance, run:
 ```bash
 prime-cli add <instance-name> --type community
@@ -64,6 +71,33 @@ This will:
 - Download and install the latest version of Plane
 - Configure the instance with the provided domain and version
 - Set up the instance for community user access
+
+### Kubernetes Based Setup
+
+To set up a community edition instance, run:
+```bash
+prime-cli add <instance-name> --type community --kubernetes
+```
+
+To install the latest version of Plane, run:
+```bash
+prime-cli install \
+    --namespace plane-ns \
+    --release-name myplane-ce \
+    --set planeVersion=v0.24.1 \
+    --set ingress.appHost="myplane.example.com" \
+    --set ingress.ingressClass=nginx \
+    --set postgres.storageClass=standard-rwo \
+    --set redis.storageClass=standard-rwo \
+    --set minio.storageClass=standard-rwo \
+    --set rabbitmq.storageClass=standard-rwo
+```
+
+This will:
+
+- Create a new Kubernetes namespace for Plane
+- Install the specified version of Plane 
+- Configure the instance with the provided `--set` options
 
 ## Usage
 
