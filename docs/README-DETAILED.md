@@ -8,6 +8,10 @@ To install Prime CLI, run:
 
 ```bash
 curl -sSL https://github.com/mguptahub/prime-cli-release/releases/latest/download/install.sh | bash
+
+source ~/.bashrc # For bash
+# source ~/.zshrc # For zsh
+
 ```
 
 This will:
