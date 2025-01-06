@@ -9,80 +9,106 @@
      /////     
 ```
 
-A command-line interface tool for managing Plane instances.
+Prime CLI is the official command-line interface tool for managing Plane instances. Whether you're running Plane on Docker or Kubernetes, Prime CLI simplifies deployment, maintenance, and operations.
 
-## Features
+## Overview
 
-- Easy installation and configuration of Plane instances
-- Multiple instance management with status monitoring
-- Docker-based deployment with custom registry support
-- Volume mapping for persistent data storage
-- Support for custom compose files and environment configurations
-- GitHub repository integration
-- Instance health monitoring and detailed status reporting
-- Automatic updates and maintenance
+### Purpose
+- Deploy and manage Plane instances with simple commands
+- Handle multiple instances on the same machine
+- Automate deployment and configuration
+- Monitor instance health and status
+- Perform backups and restores
+- Manage updates and maintenance
 
-## Installation
+### Supported Platforms
+- **Operating Systems**:
+  - Linux (amd64, arm64)
+  - macOS (amd64, arm64)
+  
+- **Deployment Options**:
+  - Docker-based deployment (default)
+  - Kubernetes deployment using Helm charts
 
-To install Prime CLI, run:
+### Key Features
+- Multi-instance management
+- Docker and Kubernetes support
+- Volume management for persistent data
+- Custom domain configuration
+- Service scaling
+- Health monitoring
+- Backup and restore capabilities
+- Instance configuration management
+- Registry support for private deployments
+
+## Quick Start
+
+### Installation
 
 ```bash
 curl -sSL https://github.com/mguptahub/prime-cli-release/releases/latest/download/install.sh | bash
 
-source ~/.bashrc # For bash
-# source ~/.zshrc # For zsh
+# After installation, reload your shell
+source ~/.bashrc  # For bash users
+source ~/.zshrc   # For zsh users
 ```
 
-This will:
-- Download the latest version of Prime CLI
-- Install it to `~/.local/bin/prime-cli`
-- Make it available system-wide for current user
-- Set appropriate permissions
-
-Verify the installation:
+Verify installation:
 ```bash
 prime-cli --version
 ```
 
-## Docker Setup
+### Prerequisites
 
-To set up Docker for optimal performance, run:
+#### For Docker-based Setup (Optional)
+If you don't have Docker installed or need to configure it:
 ```bash
 prime-cli docker-setup
 ```
 
-## Setting Up Community Edition
+### Basic Usage
 
-### Docker Based Setup
-
-> Optional: To set up Docker for optimal performance, run:
-> ```bash
-> prime-cli docker-setup
-> ```
-
-To set up a community edition instance, run:
+1. Create a new instance:
 ```bash
-prime-cli add <instance-name> --type community
+prime-cli add my-instance --type community
 ```
 
-To install the latest version of Plane, run:
+2. Install Plane:
 ```bash
-prime-cli install --domain plane.company.com --version v0.24.0
+prime-cli install --domain your-domain.com --version v0.24.0
 ```
 
-This will:
-- Download and install the latest version of Plane
-- Configure the instance with the provided domain and version
-- Set up the instance for community user access
-
-### Kubernetes Based Setup
-
-To set up a community edition instance, run:
+3. Start the instance:
 ```bash
-prime-cli add <instance-name> --type community --kubernetes
+prime-cli start
 ```
 
-To install the latest version of Plane, run:
+### Common Commands
+
+- `prime-cli list` - List all instances
+- `prime-cli switch <instance>` - Switch between instances
+- `prime-cli status` - View instance status
+- `prime-cli stop` - Stop instance
+- `prime-cli restart` - Restart instance
+- `prime-cli monitor` - Monitor services
+- `prime-cli configure` - Update configuration
+- `prime-cli backup` - Create backup
+- `prime-cli restore <backup-path>` - Restore from backup
+
+### Kubernetes Setup
+
+#### Prerequisites
+- A working Kubernetes cluster and valid `kubeconfig` context
+- Helm (optional - you can install it with `prime-cli helm-setup` if needed)
+
+To deploy on Kubernetes:
+
+1. Create instance:
+```bash
+prime-cli add my-instance --type community --kubernetes
+```
+
+3. Install:
 ```bash
 prime-cli install \
     --namespace plane-ns \
@@ -96,35 +122,18 @@ prime-cli install \
     --set rabbitmq.storageClass=standard-rwo
 ```
 
-This will:
-
-- Create a new Kubernetes namespace for Plane
-- Install the specified version of Plane 
-- Configure the instance with the provided `--set` options
-
-## Usage
-
-To list available commands, run:
-```bash
-prime-cli --help
-```
-
-## Setting Up Commercial Edition
-
-This is Work-In-Progress and will be available in a future release.
-
 ## Documentation
 
-For detailed documentation on all commands, sub-commands, and their options, please refer to:
-- [Detailed Command Reference](docs/README-DETAILED.md) - Complete documentation of all commands and options
-- [Configuration Guide](docs/CONFIG.md) - Detailed configuration options and examples
-- [Usage Examples](docs/EXAMPLES.md) - Common usage patterns and workflows
+For detailed documentation:
+- [Command Reference](docs/README-DETAILED.md) - Complete list of commands
+- [Configuration Guide](docs/CONFIG.md) - Configuration options
+- [Usage Examples](docs/EXAMPLES.md) - Common workflows
 
 ## Support
 
-- GitHub Issues: [Report a bug](https://github.com/mguptahub/prime-cli-release/issues)
-- Documentation: [View full documentation](https://docs.plane.so)
+- Issues: [Report bugs](https://github.com/mguptahub/prime-cli-release/issues)
+- Documentation: [View full docs](https://docs.plane.so)
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE)
+Licensed under the [MIT License](LICENSE)

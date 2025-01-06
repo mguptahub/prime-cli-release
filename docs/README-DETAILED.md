@@ -1,522 +1,374 @@
 # Prime CLI - Detailed Command Reference
 
-Prime CLI is a powerful command-line interface tool for managing Plane instances. This document provides comprehensive documentation of all available commands, sub-commands, and their options.
-
-## Installation
-
-To install Prime CLI, run:
-
-```bash
-curl -sSL https://github.com/mguptahub/prime-cli-release/releases/latest/download/install.sh | bash
-
-source ~/.bashrc # For bash
-# source ~/.zshrc # For zsh
-
-```
-
-This will:
-- Download the latest version of Prime CLI
-- Install it to `~/.local/bin/prime-cli`
-- Make it available system-wide for current user
-- Set appropriate permissions
-
-Verify the installation:
-```bash
-prime-cli --version
-```
-
 ## Table of Contents
-- [Docker Setup](#docker-setup)
+- [Overview](#overview)
+- [File Locations](#file-locations)
+- [Prerequisites](#prerequisites)
 - [Global Flags](#global-flags)
 - [Instance Management Commands](#instance-management-commands)
-  - [Add Instance](#add-instance)
-  - [List Instances](#list-instances)
-  - [Switch Instance](#switch-instance)
-  - [Status](#status)
-  - [Remove Instance](#remove-instance)
-- [Installation Commands](#installation-commands)
-  - [Install](#install)
-  - [Configure](#configure)
-  - [Upgrade](#upgrade)
-  - [Update CLI](#update-cli)
-- [Operation Commands](#operation-commands)
-  - [Start](#start)
-  - [Stop](#stop)
-  - [Restart](#restart)
-  - [Monitor](#monitor)
-  - [Pull](#pull)
-- [Maintenance Commands](#maintenance-commands)
-  - [Repair](#repair)
-  - [Backup](#backup)
-  - [Restore](#restore)
+- [Instance Lifecycle Commands](#instance-lifecycle-commands)
+- [Maintenance and Configuration Commands](#maintenance-and-configuration-commands)
+- [Data Protection Commands](#data-protection-commands)
+- [CLI Tool Management Commands](#cli-tool-management-commands)
+- [Runtime Tools Management Commands](#runtime-tools-management-commands)
 
+## Overview
 
-## Docker Setup
-Ensures Docker is properly configured for Plane.
+Prime CLI provides a comprehensive set of commands for managing Plane instances. This document details each command's usage, options, and examples.
 
-```bash
-prime-cli docker-setup
-```
+## File Locations
 
-**Actions:**
-- Verifies Docker installation
-- Checks Docker daemon status
-- Configures Docker for optimal use with Plane
-- Attempts automatic installation on Linux systems if needed
-- Exit and restart the terminal session if necessary
-- Check the status of the Docker daemon after installation by running `docker --version`
+Prime CLI uses several key locations for its operation:
 
+| Location | Description |
+|----------|-------------|
+| `~/.local/bin/prime-cli` | Default CLI installation path |
+| `~/.prime-cli/config` | Instance configuration file storing all instance metadata |
+| `~/.prime/<instance-name>` | Default instance installation directory |
+
+The instance configuration file (`~/.prime-cli/config`) stores:
+- List of all instances
+- Current active instance
+- Instance-specific settings
+- Installation paths
+- Version information
+- Registry configurations
+
+## Prerequisites
+
+### For Docker-based Deployments
+- Docker installed and running
+- Docker Compose support
+- Optional: Run `prime-cli docker-setup` to configure Docker
+
+### For Kubernetes-based Deployments
+- Access to a Kubernetes cluster
+- Valid kubeconfig and context
+- Helm (Optional: Install using `prime-cli helm-setup`)
+- Storage classes for persistence
 
 ## Global Flags
 
-These flags are available for all commands:
+Available for all commands:
 
 | Flag | Description |
 |------|-------------|
-| `--debug` | Enable debug logging for verbose output |
-| `--help`, `-h` | Display help information for any command |
-| `--version`, `-v` | Display version information |
+| `--debug` | Enable debug logging |
+| `--help`, `-h` | Show help for any command |
+| `--version`, `-v` | Show CLI version |
 
 ## Instance Management Commands
 
-### Add Instance
+### add
 Creates a new Plane instance.
 
 ```bash
-prime-cli add <name>
+prime-cli add <name> [flags]
 Aliases: create, new
 ```
 
 **Arguments:**
-- `name`: Name of the instance (required)
-  - Must be 3-20 characters long
-  - Only lowercase alphanumeric characters allowed
+- `name`: Instance name (required)
+  - Must be 3-20 characters
+  - Only lowercase alphanumeric characters
 
 **Flags:**
-| Flag | Description |
-|------|-------------|
-| `--dir` | Custom installation directory (default: ~/.prime/<name>) |
-| `--type` | Instance type (community, commercial) |
-| `--force` | Force create, overwrite if exists |
+| Flag | Description | Default |
+|------|-------------|---------|
+| `--dir` | Installation directory | ~/.prime/<name> |
+| `--type` | Instance type (community/commercial) | commercial |
+| `--force` | Force create, overwrite if exists | false |
+| `--kubernetes` | Use Kubernetes deployment | false |
+| `--kubeconfig` | Path to kubeconfig file | ~/.kube/config |
+| `--kubecontext` | Kubernetes context to use | current-context |
 
-**Default Behavior:**
-- Creates instance configuration in `~/.prime-cli`
-- Sets up installation directory at `~/.prime/<name>`
-
-### List Instances
-Displays all configured instances.
+### list
+Shows all configured instances.
 
 ```bash
 prime-cli list
-Aliases: ls
+Alias: ls
 ```
 
-**Output Information:**
-- Lists all configured instances
-- Marks current instance with an asterisk (*)
-- Shows instance status (Ready/Not Ready)
-- Displays installation directory
+**Output includes:**
+- Instance name
+- Type (community/commercial)
+- Ready status
+- Kubernetes status
+- Running status
+- Installation path
+- Current instance marker (*)
 
-### Switch Instance
-Changes the active instance context.
+### switch
+Changes the active instance.
 
 ```bash
 prime-cli switch <name>
-Aliases: use
+Alias: use
 ```
 
 **Arguments:**
-- `name`: Name of the instance to switch to (required)
+- `name`: Instance name to switch to (required)
 
-**Notes:**
-- Must be run before using instance-specific commands
-- Validates instance exists before switching
-- Updates current instance pointer in configuration
-
-### Status
-Shows detailed information about an instance.
+### status
+Displays detailed instance information.
 
 ```bash
 prime-cli status [instance]
 ```
 
 **Arguments:**
-- `instance`: Name of the instance (optional, defaults to current instance)
+- `instance`: Optional instance name (defaults to current)
 
-**Output Information:**
-- Instance name and installation directory
-- Instance state (Ready, Running)
-- Start and stop timestamps
-- Domain and app version
-- Volume mapping configuration
-- GitHub repository details
-- Docker compose configuration
-- Additional files and custom configurations
-- Registry settings
+**Shows:**
+- Basic Info:
+  - Name and install directory
+  - Type and version
+  - Domain configuration
+  - Running status
+- Docker-specific:
+  - Service status
+  - Volume mappings
+  - Registry settings
+- Kubernetes-specific:
+  - Namespace
+  - Release name
+  - Resource status
 
-### Remove Instance
-Removes an instance configuration.
+### remove
+Removes an instance.
 
 ```bash
 prime-cli remove <name>
 Aliases: rm, delete
 ```
 
-**Arguments:**
-- `name`: Name of the instance to remove (required)
-
 **Flags:**
 | Flag | Description |
 |------|-------------|
-| `--force` | Force remove without confirmation |
+| `--force` | Skip confirmation |
 
-**Notes:**
-- Removes instance configuration from `~/.prime-cli`
-- Optionally removes installation directory from `~/.prime/<name>`
+## Instance Lifecycle Commands
 
-## Installation Commands
-
-### Install
-Installs Plane on the current instance.
+### install
+Installs or configures a Plane instance.
 
 ```bash
-prime-cli install [flags]
+# Docker-based installation
+prime-cli install --domain example.com [flags]
+
+# Kubernetes-based installation
+prime-cli install --release-name plane --namespace plane [flags]
 ```
 
-**Required Flags:**
-- `--domain <domain-name>`: Domain name for the instance
-
-**Optional Flags:**
-
-*Source Configuration:*
+**Docker-specific Flags:**
 | Flag | Description |
 |------|-------------|
-| `--release <version>` | Specific version to install |
-| `--start`, `-s` | Start after installation |
+| `--domain` | Domain name (required) |
+| `--version` | Plane version |
+| `--start` | Start after install |
+| `--map-volume-to-disk` | Map volumes to host |
+| `--scale` | Scale services (SERVICE=COUNT) |
 
-*GitHub Based Configuration:*
+**Kubernetes-specific Flags:**
 | Flag | Description |
 |------|-------------|
-| `--github-repo <repo>` | Custom GitHub repository |
-| `--github-token`, `-t` | GitHub token for private repos |
-| `--compose-file`, `-f` | Custom compose file name |
-| `--compose-env`, `-n` | Custom env file name |
-| `--additional-file` | Additional files to download |
+| `--release-name` | Helm release name |
+| `--namespace` | Kubernetes namespace |
+| `--set` | Set Helm values |
+| `--set-string` | Set string values |
+| `--values` | Values file path |
+| `--wait` | Wait for pods |
 
-*URL Based Configuration:*
-| Flag | Description |
-|------|-------------|
-| `--compose-file-url` | URL to download compose file (format: filename=url) |
-| `--compose-env-url` | URL to download env file (format: filename=url) |
-| `--additional-file-url` | URL to download additional files (format: filename=url) |
-
-*Environment Configuration:*
-| Flag | Description |
-|------|-------------|
-| `--env`, `-e` | Set environment variables (format: KEY=VALUE) |
-| `--map-volume-to-disk` | Map volumes to disk |
-| `--scale` | Scale services (format: SERVICE=COUNT) |
-
-*Docker Registry Configuration:* (optional)
-| Flag | Description |
-|------|-------------|
-| `--registry-url` | Docker registry URL (default: https://index.docker.io/v1/) |
-| `--registry-username` | Registry username |
-| `--registry-password` | Registry password |
-| `--registry-email` | Registry email |
-
-### Configure
+### configure
 Updates instance configuration.
 
 ```bash
 prime-cli configure [command]
-Aliases: config
+Alias: config
 ```
 
 **Subcommands:**
+- `list` (alias: `ls`): Show current config
+- `set`: Update configuration
+- `view`: Display compose/values file
+- `reload`: Regenerate configuration
 
-#### List Configuration (ls)
-Display current configuration.
-
-```bash
-prime-cli configure list
-Aliases: ls
-```
-
-**Output Information:**
-- Services:
-  * Lists all services defined in compose file
-  * Shows service names in alphabetical order
-- Environment Variables:
-  * Shows all configured environment variables
-  * Displays KEY=VALUE pairs
-  * Includes both default and custom variables
-
-
-#### Set Configuration (set)
-Updates a configuration value.
-
-```bash
-prime-cli configure set [flags]
-```
-
-**Flags:**
-
+**Common Flags for `set`:**
 | Flag | Description |
 |------|-------------|
-| `--domain <domain>` | Update domain name |
-| `--env`, `-e` | Set environment variables (format: KEY=VALUE) |
-| `--scale` | Scale services (format: SERVICE=COUNT) |
-| `--restart`, `-r` | Restart services after update |
+| `--domain` | Update domain |
+| `--env`, `-e` | Set environment variables |
+| `--scale` | Scale services |
+| `--restart` | Restart after changes |
 
-**Notes:**
+## Maintenance and Configuration Commands
 
-- Multiple `--env` flags can be used for setting environment variables
-- Multiple `--scale` flags can be used for scaling services
-
-#### Reload Configuration
-
-Regenerate and Reloads the current configuration.
-
-```bash
-prime-cli configure reload
-```
-
-**Notes:**
-
-- Stops all running services
-- Generates a new configuration
-- Restarts all services
-
-#### View Configuration
-View the current Docker Compose configuration.
-
-```bash
-prime-cli configure view
-Aliases: print
-```
-
-**Flags:**
-| Flag | Description |
-|------|-------------|
-| `--out`, `-o` | Save the configuration to the specified file path |
-
-**Output Information:**
-- If the service is running, displays the current `.run.yml` configuration
-- If the service is not running, generates and displays a new configuration
-- Use `--out` flag to save the configuration to a file instead of displaying it
-
-**Examples:**
-```bash
-# Display configuration
-prime-cli configure view
-
-# Save configuration to file
-prime-cli configure view --out /path/to/config.yml
-prime-cli configure view -o ./my-config.yml
-```
-
-**Notes:**
-- At least one flag must be specified for the main configure command
-- Changes take effect after restart
-- Multiple `--env` flags can be used
-- Scale accepts multiple service specifications
-
-### Upgrade
-Upgrades instance to latest version.
-
-```bash
-prime-cli upgrade [flags]
-```
-
-**Flags:**
-| Flag | Description |
-|------|-------------|
-| `--start`, `-s` | Start after upgrade |
-
-**Notes:**
-- Preserves existing configuration
-- Downloads new Docker images
-- Updates compose files if needed
-
-### Update CLI
-Updates the Prime CLI tool itself.
-
-```bash
-prime-cli update-cli
-```
-
-**Notes:**
-- Updates only the CLI binary
-- Preserves all instance configurations
-- Checks GitHub for latest release
-
-## Operation Commands
-
-### Start
-Starts all services for current instance.
+### start
+Starts the instance services.
 
 ```bash
 prime-cli start
-Aliases: up
+Alias: up
 ```
 
-**Notes:**
-- Starts all configured services
-- Applies current environment configuration
-- Respects service scaling settings
-
-### Stop
-Stops all services for current instance.
+### stop
+Stops the instance services.
 
 ```bash
 prime-cli stop
-Aliases: down
+Alias: down
 ```
 
-**Notes:**
-- Stops all running services
-- Preserves volume data
-- Updates instance status
-
-### Restart
-Restarts all services for current instance.
+### restart
+Restarts all services.
 
 ```bash
 prime-cli restart
-Aliases: reboot
+Alias: reboot
 ```
 
-**Notes:**
-- Equivalent to stop followed by start
-- Reloads all configuration
-- Preserves volume data
-
-### Monitor
-Shows status of running services.
+### monitor
+Shows service status and logs.
 
 ```bash
 prime-cli monitor
-Aliases: ps
+Alias: ps
 ```
 
-**Output Information:**
-- Lists all services
-- Shows container status
-- Displays resource usage
-- Indicates service health
+**Features:**
+- Real-time service status
+- Log streaming
+- Resource usage
+- Interactive navigation
 
-### Pull
-Updates Docker images.
+### pull
+Updates service images.
 
 ```bash
 prime-cli pull
-Aliases: get
+Alias: get
 ```
 
-**Notes:**
-- Downloads latest Docker images
-- Does not change version
-- Updates only container images
+## Data Protection Commands
 
-## Maintenance Commands
+### backup
+Creates instance backup.
 
-### Repair
-Repairs the current instance using previously downloaded configuration.
+```bash
+prime-cli backup
+```
+
+**Subcommands:**
+- `list` (alias: `ls`): List backups
+- `validate`: Check backup integrity
+
+### restore
+Restores from backup.
+
+```bash
+prime-cli restore <backup-path>
+```
+
+**Flags:**
+| Flag | Description |
+|------|-------------|
+| `--backup`, `-b` | Backup path |
+
+### repair
+Repairs instance installation.
 
 ```bash
 prime-cli repair
 ```
 
-**Actions:**
-1. Confirms user intent before proceeding
-2. Reinstalls the instance using the existing configuration:
-   - Uses current domain and version settings
-   - Preserves GitHub repository settings
-   - Maintains Docker registry configuration
-   - Keeps environment variables and service scaling
-   - Retains volume mapping settings
-3. Downloads and updates necessary files
-4. Reconfigures the instance with saved settings
+## CLI Tool Management Commands
 
-**Notes:**
-1. Repair is useful when instance files are corrupted or missing
-2. Does not modify or delete existing data volumes
-3. Preserves all custom configurations and settings
-4. Can be used to fix broken installations
-
-### Backup
-Creates a backup of the current Plane instance.
+### update-cli
+Updates Prime CLI to latest version.
 
 ```bash
-prime-cli backup [flags]
+prime-cli update-cli
+Alias: update
 ```
 
-**Subcommands:**
-- `list`, `ls`: Lists all available backups
-- `validate`, `check`: Validates a backup
+## Runtime Tools Management Commands
 
-#### Backup Creation
-Running `backup` without subcommands creates a new backup:
-- Creates a timestamped backup in the instance's backup directory
-- Includes database data, configuration files, and environment settings
-- Backup directory: `<instance-dir>/backups/<timestamp>`
-
-#### List Backups
-```bash
-prime-cli backup list
-Aliases: ls
-```
-
-**Output Information:**
-- Lists all available backups for the current instance
-- Shows backup date and time
-- Displays backup size
-- Shows backup path
-
-#### Validate Backup
-```bash
-prime-cli backup validate <backup-path>
-Aliases: check
-```
-
-**Arguments:**
-- `backup-path`: Path to the backup directory to validate (required)
-
-**Validation Checks:**
-- Verifies backup structure and integrity
-- Checks for required files and configurations
-- Validates backup metadata
-
-### Restore
-Restores a Plane instance from a backup.
+### docker-setup
+Configures Docker as the default runtime.
 
 ```bash
-prime-cli restore [backup-path] [flags]
+prime-cli docker-setup
 ```
 
-**Required Flags:**
-| Flag | Description |
-|------|-------------|
-| `--backup`, `-b` | Path to backup directory (required) |
+### helm-setup
+Verifies and sets up Helm installation.
 
-**Notes:**
-1. Ensure the instance is stopped before restoration
-2. Backup validation is performed before restoration
-3. Current data will be replaced with backup data
-4. Service configurations will be restored to backup state
-
-## Usage Notes
-
-1. Instance names must be 3-20 characters long and contain only lowercase alphanumeric characters.
-2. Commands requiring instance context will fail if no instance is selected.
-3. SSL setup requires proper DNS configuration.
-4. Remote services need valid connection strings.
-5. Multiple `--env` flags can be used for setting environment variables.
-6. The `--debug` flag enables verbose logging for troubleshooting.
-
-For detailed help on any command:
 ```bash
-prime-cli [command] --help
-
+prime-cli helm-setup
 ```
+
+## Usage Examples
+
+### Docker-based Setup
+```bash
+# Create and install
+prime-cli add plane-instance --type community
+prime-cli install --domain plane.example.com --version v0.24.0 --start
+
+# Scale services
+prime-cli configure set --scale web=2 --scale worker=3 --restart
+
+# Backup/Restore
+prime-cli backup
+prime-cli restore --backup /path/to/backup
+```
+
+### Kubernetes-based Setup
+```bash
+# Create and install
+prime-cli add k8s-plane --type community --kubernetes
+prime-cli install \
+  --namespace plane \
+  --release-name plane \
+  --set ingress.host=plane.example.com
+
+# Update configuration
+prime-cli configure set \
+  --set replicas.web=3 \
+  --set replicas.worker=2
+```
+
+## Best Practices
+
+1. **Instance Management**
+   - Use meaningful instance names
+   - Keep backups before major changes
+   - Monitor resource usage
+
+2. **Configuration**
+   - Use environment files for sensitive data
+   - Scale services based on load
+   - Validate changes before production
+
+3. **Maintenance**
+   - Regular backups
+   - Monitor logs for issues
+   - Keep CLI and instances updated
+
+## Troubleshooting
+
+1. **Docker Issues**
+   - Check Docker daemon status
+   - Verify volume permissions
+   - Review service logs
+
+2. **Kubernetes Issues**
+   - Validate kubeconfig
+   - Check pod status and events
+   - Verify storage classes
+
+3. **General**
+   - Use `--debug` for verbose logs
+   - Check instance status
+   - Verify network connectivity
