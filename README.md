@@ -47,9 +47,12 @@ Prime CLI is the official command-line interface tool for managing Plane instanc
 
 ```bash
 curl -sSL https://github.com/mguptahub/prime-cli-release/releases/latest/download/install.sh | bash
+```
 
-# After installation, reload your shell
+After installation, reload your shell
+```bash
 source ~/.bashrc  # For bash users
+# OR
 source ~/.zshrc   # For zsh users
 ```
 
@@ -70,12 +73,13 @@ prime-cli docker-setup
 
 1. Create a new instance:
 ```bash
-prime-cli add my-instance --type community
+prime-cli add my-instance --type community 
 ```
+> Allowed types: `community` (default), `commercial`
 
 2. Install Plane:
 ```bash
-prime-cli install --domain your-domain.com --version v0.24.0
+prime-cli install --domain plane.example.com 
 ```
 
 3. Start the instance:

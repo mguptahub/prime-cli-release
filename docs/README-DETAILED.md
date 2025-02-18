@@ -76,7 +76,7 @@ Aliases: create, new
 | Flag | Description | Default |
 |------|-------------|---------|
 | `--dir` | Installation directory | ~/.prime/<name> |
-| `--type` | Instance type (community/commercial) | commercial |
+| `--type` | Instance type (community/commercial) | community |
 | `--force` | Force create, overwrite if exists | false |
 | `--kubernetes` | Use Kubernetes deployment | false |
 | `--kubeconfig` | Path to kubeconfig file | ~/.kube/config |
@@ -165,8 +165,7 @@ prime-cli install --release-name plane --namespace plane [flags]
 | Flag | Description |
 |------|-------------|
 | `--domain` | Domain name (required) |
-| `--version` | Plane version |
-| `--start` | Start after install |
+| `--release` | Plane version |
 | `--map-volume-to-disk` | Map volumes to host |
 | `--scale` | Scale services (SERVICE=COUNT) |
 
@@ -314,7 +313,7 @@ prime-cli helm-setup
 ```bash
 # Create and install
 prime-cli add plane-instance --type community
-prime-cli install --domain plane.example.com --version v0.24.0 --start
+prime-cli install --domain plane.example.com --release v0.24.1 --start
 
 # Scale services
 prime-cli configure set --scale web=2 --scale worker=3 --restart

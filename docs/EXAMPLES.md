@@ -8,10 +8,14 @@ This document provides practical examples of common Prime CLI workflows and usag
 ```bash
 # Verify CLI installation
 prime-cli --version
+```
 
+```bash
 # Optional: Set up Docker if needed
 prime-cli docker-setup
+```
 
+```bash
 # Optional: Set up Helm for Kubernetes deployments
 prime-cli helm-setup
 ```
@@ -25,9 +29,7 @@ prime-cli add my-plane --type community
 
 # Install with required settings
 prime-cli install \
-  --domain plane.company.com \
-  --version v0.24.0 \
-  --start
+  --domain plane.example.com
 
 # Check status
 prime-cli status
@@ -43,7 +45,7 @@ prime-cli add my-plane \
 # Install with advanced options
 prime-cli install \
   --domain plane.company.com \
-  --version v0.24.0 \
+  --release v0.24.1 \
   --map-volume-to-disk \
   --scale web=2 \
   --scale worker=3 \
@@ -53,7 +55,7 @@ prime-cli install \
 
 ### Registry Configuration
 ```bash
-# Install with private registry
+# Install with private docker registry
 prime-cli install \
   --domain plane.company.com \
   --registry-url registry.company.com \
@@ -187,7 +189,7 @@ prime-cli update-cli
 prime-cli pull
 
 # Upgrade instance
-prime-cli upgrade --start
+prime-cli upgrade
 
 # Repair instance
 prime-cli repair
@@ -217,16 +219,25 @@ prime-cli configure set \
 ```bash
 # Create development instance
 prime-cli add dev --type community
+
 prime-cli switch dev
+
 prime-cli install \
   --domain localhost \
-  --version v0.24.0 \
+  --release v0.24.1 \
   --env MODE=development \
   --env DEBUG=true \
   --map-volume-to-disk
 
-# Start and monitor
+```
+
+```bash
+# Start
 prime-cli start
+```
+
+```bash
+# Monitor
 prime-cli monitor
 ```
 
@@ -234,19 +245,26 @@ prime-cli monitor
 ```bash
 # Create production instance
 prime-cli add prod --type community
+
 prime-cli switch prod
+
 prime-cli install \
   --domain plane.company.com \
-  --version v0.24.0 \
+  --release v0.24.1 \
   --map-volume-to-disk \
   --scale web=3 \
   --scale worker=2 \
   --env MODE=production \
   --env REDIS_URL=redis://prod-redis:6379
 
+```
+
+```bash
 # Backup before changes
 prime-cli backup
+```
 
+```bash
 # Apply changes
 prime-cli configure set \
   --scale web=4 \
@@ -265,7 +283,7 @@ for env in dev staging prod; do
   prime-cli switch $env
   prime-cli install \
     --domain $env.plane.company.com \
-    --version v0.24.0 \
+    --release v0.24.1 \
     --env ENV=$env
 done
 
@@ -290,7 +308,7 @@ prime-cli install \
   --registry-username user \
   --registry-password pass \
   --registry-email user@company.com \
-  --version v0.24.0
+  --release v0.24.1
 ```
 
 ## Troubleshooting Examples
