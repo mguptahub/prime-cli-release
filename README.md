@@ -1,4 +1,3 @@
-# Prime CLI
 
 ```
       /////////
@@ -112,7 +111,7 @@ To deploy on Kubernetes:
 prime-cli add my-instance --type community --kubernetes
 ```
 
-3. Install:
+2. Install:
 ```bash
 prime-cli install \
     --namespace plane-ns \
