@@ -46,7 +46,7 @@ Prime CLI is the official command-line interface tool for managing Plane instanc
 ### Installation
 
 ```bash
-curl -sSL https://github.com/mguptahub/prime-cli-release/releases/latest/download/install.sh | bash
+curl -sSL https://mguptahub.github.io/prime-cli/install.sh | bash
 ```
 
 After installation, reload your shell
@@ -126,16 +126,9 @@ prime-cli install \
     --set rabbitmq.storageClass=standard-rwo
 ```
 
-## Documentation
-
-For detailed documentation:
-- [Command Reference](docs/README-DETAILED.md) - Complete list of commands
-- [Configuration Guide](docs/CONFIG.md) - Configuration options
-- [Usage Examples](docs/EXAMPLES.md) - Common workflows
-
 ## Support
 
-- Issues: [Report bugs](https://github.com/mguptahub/prime-cli-release/issues)
+- Issues: [Report bugs](https://github.com/makeplane/prime-cli/issues)
 - Documentation: [View full docs](https://docs.plane.so)
 
 ## License
