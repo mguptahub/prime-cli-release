@@ -128,9 +128,6 @@ prime-cli install \
 
 ## Support
 
-- Issues: [Report bugs](https://github.com/makeplane/prime-cli/issues)
 - Documentation: [View full docs](https://docs.plane.so)
+- Discord: [Join our Discord server](https://discord.gg/h3HrRgqG)
 
-## License
-
-Licensed under the [MIT License](LICENSE)
